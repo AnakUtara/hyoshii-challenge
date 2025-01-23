@@ -45,7 +45,7 @@ class AccumulatedPackageQuantity extends ApexChartWidget
         foreach($pics as $pic) {
             $where = PackingPerformance::where([
                 ['person_in_charge_id','=', $pic->id],
-                ['timestamp', '>', Carbon::parse($this->filterFormData['date'])],
+                ['timestamp', '>', Carbon::parse($this->filterFormData['tanggal'])],
             ]);
             $packA = $where->sum('qty_pack_a_0_2kg');
             $packB = $where->sum('qty_pack_b_0_3kg');
@@ -59,7 +59,7 @@ class AccumulatedPackageQuantity extends ApexChartWidget
             'chart' => [
                 'stacked' => true,
                 'type' => 'bar',
-                'height' => 500,
+                'height' => 400,
             ],
             'series' => [
                 [
@@ -101,11 +101,6 @@ class AccumulatedPackageQuantity extends ApexChartWidget
                     ],
                 ],
             ],
-            // 'plotOptions' => [
-            //     'bar' => [
-            //         'distributed' => true
-            //     ],
-            // ],
             'legend' => [
                 'position' => 'right',
                 'horizontalAlign' => 'left',
@@ -116,7 +111,7 @@ class AccumulatedPackageQuantity extends ApexChartWidget
     protected function getFormSchema(): array
     {
         return [
-            DatePicker::make('date')
+            DatePicker::make('tanggal')
                 ->default(today())
         ];
     }
