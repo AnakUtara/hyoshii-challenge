@@ -12,6 +12,8 @@ use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class ProductivityRatePerDay extends ApexChartWidget
 {
+
+    protected static ?int $sort = 4;
     /**
      * Chart Id
      *

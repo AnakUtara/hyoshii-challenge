@@ -6,11 +6,11 @@ use App\Models\PackingPerformance;
 use App\Models\PersonInCharge;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
-use Filament\Support\Enums\MaxWidth;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class AccumulatedPackageQuantity extends ApexChartWidget
 {
+        protected static ?int $sort = 3;
     /**
      * Chart Id
      *

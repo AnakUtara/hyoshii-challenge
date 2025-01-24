@@ -6,29 +6,26 @@ use App\Models\PackingPerformance;
 use App\Models\PersonInCharge;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Select;
 use Filament\Support\RawJs;
-use Flowframe\Trend\Trend;
-use Flowframe\Trend\TrendValue;
 use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
-class ProductivityRate extends ApexChartWidget
+class RejectAndGrossWeightRatioPerHour extends ApexChartWidget
 {
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 5;
     /**
      * Chart Id
      *
      * @var string
      */
-    protected static ?string $chartId = 'productivityRate';
+    protected static ?string $chartId = 'rejectAndGrossWeightRatioPerHour';
 
     /**
      * Widget Title
      *
      * @var string|null
      */
-    protected static ?string $heading = 'Tingkat Produktivitas PIC/Jam';
+    protected static ?string $heading = 'Reject Ratio/Jam';
 
     /**
      * Chart options (series, labels, types, size, animations...)
@@ -41,44 +38,41 @@ class ProductivityRate extends ApexChartWidget
         $dataPerHour = PersonInCharge::with(['packingPerformance' => function ($query) {
                             $query->select([
                                 'person_in_charge_id',
-                                DB::raw('qty_pack_a_0_2kg + qty_pack_b_0_3kg + qty_pack_c_0_4kg as total_qty_packs'),
+                                DB::raw('(reject_kg/gross_weight_kg) * 100  as reject_ratio'),
                                 'timestamp',
-                            ])->where('timestamp', '>=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp');
+                            ])->where('timestamp', '>=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
+                            ->orderBy('timestamp');
                         }])
                         ->get();
         $timestamps = PackingPerformance::select('timestamp')->distinct()->get();
         $chartDataPerHour = $dataPerHour->map(fn($value) => [
                                 'name' => $value->name,
                                 'data' => $value->packingPerformance->map(fn($value) =>
-                                    ceil($value->total_qty_packs / 60),
+                                    round($value->reject_ratio),
                                 )
                             ])->toArray();
         return [
             'chart' => [
-                'type' => 'line',
-                'height' => 400,
-                'distributed' => true,
+                'type' => 'area',
+                'height' => 300,
+                'distributed' => true
             ],
             'series' => $chartDataPerHour,
-            'xaxis' => [
-                'categories' => $timestamps->map(fn($value) => $value->timestamp->format('H:i:s'))->toArray(),
+            'labels' => $timestamps->map(fn($value) => Carbon::parse($value->timestamp)->format('H:i'))->toArray(),
+            'legend' => [
                 'labels' => [
-                    'style' => [
-                        'fontFamily' => 'inherit',
-                    ],
+                    'fontWeight' => 600,
                 ],
+            ],
+            'dataLabels' => [
+                'enabled' => true,
             ],
             'yaxis' => [
-                'stepSize' => 1,
-                'min' => 0,
                 'labels' => [
                     'style' => [
                         'fontFamily' => 'inherit',
                     ],
                 ],
-            ],
-            'stroke' => [
-                'curve' => 'smooth',
             ],
         ];
     }
@@ -97,7 +91,7 @@ class ProductivityRate extends ApexChartWidget
                 yaxis: {
                     labels: {
                         formatter: function (val) {
-                            return val + ' paket/menit';
+                            return val + '%';
                         }
                     }
                 },
