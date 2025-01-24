@@ -42,7 +42,7 @@ class QuantityPacksRatioPerDay extends ApexChartWidget
                     DB::raw('SUM(qty_pack_c_0_4kg) as total_pack_c'),
                     DB::raw('SUM(qty_pack_a_0_2kg + qty_pack_b_0_3kg + qty_pack_c_0_4kg) as total_packs')
                 )
-                ->where('day', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
+                ->whereDate('day', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
                 ->groupBy('day')
                 ->orderBy('day')
                 ->get()

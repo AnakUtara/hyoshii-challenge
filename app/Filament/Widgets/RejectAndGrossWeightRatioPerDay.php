@@ -40,7 +40,7 @@ class RejectAndGrossWeightRatioPerDay extends ApexChartWidget
                 DB::raw('(sum(reject_kg)/sum(gross_weight_kg)) * 100  as reject_ratio'),
                 DB::raw('DATE("timestamp") as days'),
             ])
-            ->where('days', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
+            ->whereDate('days', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
             ->groupBy('person_in_charge_id');
         }])->get();
 

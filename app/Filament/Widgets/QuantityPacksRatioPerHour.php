@@ -42,7 +42,7 @@ class QuantityPacksRatioPerHour extends ApexChartWidget
                             DB::raw('SUM(qty_pack_c_0_4kg) as total_pack_c'),
                             DB::raw('SUM(qty_pack_a_0_2kg + qty_pack_b_0_3kg + qty_pack_c_0_4kg) as total_packs')
                         )
-                        ->where('timestamp', '>=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
+                        ->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
                         ->groupBy(DB::raw('TIME(timestamp)'))
                         ->orderBy('hour')
                         ->get()
@@ -54,7 +54,7 @@ class QuantityPacksRatioPerHour extends ApexChartWidget
                                 'ratio_pack_c' => round(($row->total_pack_c / $row->total_packs) * 100)
                             ];
                         });
-        $timestamps = PackingPerformance::select('timestamp')->distinct()->get();
+        $timestamps = PackingPerformance::select('timestamp')->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp')->distinct()->get();
         $chartDataPerHour = [
             [
                 'name' => 'Pack A (0.2kg)',

@@ -36,57 +36,46 @@ class ProductivityRatePerDay extends ApexChartWidget
      */
     protected function getOptions(): array
     {
-        $dataPerDay = PersonInCharge::with(['packingPerformance' => function ($query) {
+        $data = PersonInCharge::with(['packingPerformance' => function ($query) {
             $query->select([
                 'person_in_charge_id',
-                DB::raw('sum(qty_pack_a_0_2kg + qty_pack_b_0_3kg + qty_pack_c_0_4kg) as total_qty_packs_day'),
+                DB::raw('(sum(qty_pack_a_0_2kg) + sum(qty_pack_b_0_3kg) + sum(qty_pack_c_0_4kg)) / 600 as total_qty_packs_day'),
                 'timestamp',
             ])
-            ->whereBetween('timestamp', [Carbon::parse($this->filterFormData['mulai_dari'])->toDateString(), Carbon::parse($this->filterFormData['sampai_dengan'])->toDateString()])
+            ->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
             ->groupBy('person_in_charge_id');
         }])->get();
-        $timestamps = PackingPerformance::select('timestamp')->distinct()->get();
-        $chartDataPerDay = $dataPerDay->map(fn($value) => [
-            'name' => $value->name,
-            'data' => $value->packingPerformance->map(fn($value) =>
-                ceil($value->total_qty_packs_day / 600),
-            )
-        ])->toArray();
+
+        $labels = [];
+        $series = [];
+
+        foreach ($data as $pic) {
+            $picName = $pic->name;
+            $totalQtyPacksDay = $pic->packingPerformance->first() == null ? 0 : round($pic->packingPerformance->first()->total_qty_packs_day);
+            $labels[] = $picName;
+            $series[] = $totalQtyPacksDay;
+        }
+
         return [
             'chart' => [
-                'type' => 'line',
-                'height' => 400,
+                'type' => 'pie',
+                'height' => 500,
                 'distributed' => true
             ],
-            'series' => $chartDataPerDay,
-            'xaxis' => [
-                'categories' => $timestamps->map(fn($value) => $value->timestamp->toDateString())->toArray(),
+            'labels' => $labels,
+            'series' => $series,
+            'legend' => [
                 'labels' => [
-                    'style' => [
-                        'fontFamily' => 'inherit',
-                    ],
+                    'fontFamily' => 'inherit',
                 ],
-            ],
-            'yaxis' => [
-                'stepSize' => 1,
-                'min' => 0,
-                'labels' => [
-                    'style' => [
-                        'fontFamily' => 'inherit',
-                    ],
-                ],
-            ],
-            'stroke' => [
-                'curve' => 'smooth',
             ],
         ];
     }
 
-        protected function getFormSchema(): array
+    protected function getFormSchema(): array
     {
         return [
-            DatePicker::make('mulai_dari')->default(today()),
-            DatePicker::make('sampai_dengan')->default(today()->addDays(5)),
+            DatePicker::make('tanggal')->default(today()),
         ];
     }
 
@@ -97,7 +86,7 @@ class ProductivityRatePerDay extends ApexChartWidget
                 yaxis: {
                     labels: {
                         formatter: function (val) {
-                            return val + ' paket/jam';
+                            return '±' + val + ' paket/menit';
                         }
                     }
                 },

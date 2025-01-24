@@ -40,11 +40,11 @@ class RejectAndGrossWeightRatioPerHour extends ApexChartWidget
                                 'person_in_charge_id',
                                 DB::raw('(reject_kg/gross_weight_kg) * 100  as reject_ratio'),
                                 'timestamp',
-                            ])->where('timestamp', '>=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
+                            ])->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())
                             ->orderBy('timestamp');
                         }])
                         ->get();
-        $timestamps = PackingPerformance::select('timestamp')->distinct()->get();
+        $timestamps = PackingPerformance::select('timestamp')->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp')->distinct()->get();
         $chartDataPerHour = $dataPerHour->map(fn($value) => [
                                 'name' => $value->name,
                                 'data' => $value->packingPerformance->map(fn($value) =>

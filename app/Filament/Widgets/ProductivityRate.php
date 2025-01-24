@@ -43,19 +43,19 @@ class ProductivityRate extends ApexChartWidget
                                 'person_in_charge_id',
                                 DB::raw('qty_pack_a_0_2kg + qty_pack_b_0_3kg + qty_pack_c_0_4kg as total_qty_packs'),
                                 'timestamp',
-                            ])->where('timestamp', '>=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp');
+                            ])->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp');
                         }])
                         ->get();
-        $timestamps = PackingPerformance::select('timestamp')->distinct()->get();
+        $timestamps = PackingPerformance::select('timestamp')->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString())->orderBy('timestamp')->distinct()->get();
         $chartDataPerHour = $dataPerHour->map(fn($value) => [
                                 'name' => $value->name,
                                 'data' => $value->packingPerformance->map(fn($value) =>
-                                    ceil($value->total_qty_packs / 60),
+                                    round($value->total_qty_packs / 60),
                                 )
                             ])->toArray();
         return [
             'chart' => [
-                'type' => 'line',
+                'type' => 'area',
                 'height' => 400,
                 'distributed' => true,
             ],
@@ -97,7 +97,7 @@ class ProductivityRate extends ApexChartWidget
                 yaxis: {
                     labels: {
                         formatter: function (val) {
-                            return val + ' paket/menit';
+                            return '±' + val + ' paket/menit';
                         }
                     }
                 },

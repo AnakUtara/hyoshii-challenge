@@ -13,8 +13,8 @@ class PackingPerformanceSeeder extends Seeder
      */
     public function run(): void
     {
-        PackingPerformance::factory()->count(8)->pic1()->create();
-        PackingPerformance::factory()->count(8)->pic2()->create();
-        PackingPerformance::factory()->count(8)->pic3()->create();
+        PackingPerformance::factory()->count(10)->pic1()->create();
+        PackingPerformance::factory()->count(10)->pic2()->create();
+        PackingPerformance::factory()->count(10)->pic3()->create();
     }
 }

@@ -45,8 +45,7 @@ class AccumulatedPackageQuantity extends ApexChartWidget
         foreach($pics as $pic) {
             $where = PackingPerformance::where([
                 ['person_in_charge_id','=', $pic->id],
-                ['timestamp', '>', Carbon::parse($this->filterFormData['tanggal'])],
-            ]);
+            ])->whereDate('timestamp', '=', Carbon::parse($this->filterFormData['tanggal'])->toDateString());
             $packA = $where->sum('qty_pack_a_0_2kg');
             $packB = $where->sum('qty_pack_b_0_3kg');
             $packC = $where->sum('qty_pack_c_0_4kg');
