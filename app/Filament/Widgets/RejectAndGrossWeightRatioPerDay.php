@@ -5,12 +5,13 @@ namespace App\Filament\Widgets;
 use App\Models\PersonInCharge;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
+use Filament\Support\RawJs;
 use Illuminate\Support\Facades\DB;
 use Leandrocfe\FilamentApexCharts\Widgets\ApexChartWidget;
 
 class RejectAndGrossWeightRatioPerDay extends ApexChartWidget
 {
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 6;
     /**
      * Chart Id
      *
@@ -48,7 +49,7 @@ class RejectAndGrossWeightRatioPerDay extends ApexChartWidget
         $series = $packingPerformance->map(fn($value) => round($value->reject_ratio))->toArray();
         return [
             'chart' => [
-                'type' => 'donut',
+                'type' => 'pie',
                 'height' => 300,
             ],
             'labels' => $labels,
@@ -67,5 +68,20 @@ class RejectAndGrossWeightRatioPerDay extends ApexChartWidget
         return [
             DatePicker::make('tanggal')->default(today()),
         ];
+    }
+
+        protected function extraJsOptions(): ?RawJs
+    {
+        return RawJs::make(<<<'JS'
+            {
+                yaxis: {
+                    labels: {
+                        formatter: function (val) {
+                            return val + '%';
+                        }
+                    }
+                },
+            }
+        JS);
     }
 }
