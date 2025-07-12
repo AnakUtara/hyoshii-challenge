@@ -1,66 +1,117 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Hyoshii Packing Performance Dashboard
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern dashboard for Hyoshii, a premium strawberry farm in Bandung, designed to track daily packing efficiency per hour with rich data visualizations.  
+**Built with Laravel 11 & FilamentPHP in 4 days as an interview technical challenge.**
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 📖 Project Overview
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This project was developed as a first-round interview test for Hyoshii, a Bandung-based business specializing in premium strawberries. The goal was to build a dashboard to efficiently track and visualize the packing performance of each Person In Charge (PIC) using real-world datasets. The application enables admins to monitor productivity, analyze reject ratios, and optimize workflow based on actionable data.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ✨ Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **CRUD for Packing Data:** Easy management of hourly packing records.
+- **Bulk Data Entry:** Rapid data input using a repeater form—add multiple hourly entries in a single action.
+- **Role-based Authentication:** Secure access powered by Filament.
+- **Interactive Charts & Reports:** Visualize key metrics and trends with user-friendly charts.
+- **Responsive UI:** Clean, modern interface optimized for both desktop and mobile.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🗃️ Data Structure
 
-## Laravel Sponsors
+Each data entry includes:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Field                                | Description                                      |
+|-------------------------------------- |--------------------------------------------------|
+| Datetime                             | Timestamp of record                              |
+| PIC Pengerjaan                       | Responsible PIC                                  |
+| Berat Kotor Strawberry yang di pack   | Gross weight of strawberries packed (kg/hour)    |
+| Qty Pack A per jam                   | Quantity of Pack A per hour                      |
+| Qty Pack B per jam                   | Quantity of Pack B per hour                      |
+| Qty Pack C per jam                   | Quantity of Pack C per hour                      |
+| Reject (kg) per jam                  | Weight of rejected strawberries (kg/hour)        |
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 📊 Visualizations
 
-## Contributing
+- **Hourly Accumulation by PIC:** Track each PIC’s total output per hour.
+- **Hourly Accumulation by Pack Model:** Monitor output for each pack type (A, B, C).
+- **PIC Productivity:** Measure output per 60 minutes and per full day (600 minutes).
+- **Reject Ratio:** Visualize reject-to-weight percentages by hour and day.
+- **Pack Model Ratios:** See the proportional output of each pack type (A/B/C) by hour and day.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## 🛠️ Tech Stack
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Backend:** Laravel 11
+- **Admin Panel & Charts:** FilamentPHP
+- **Frontend:** FilamentPHP (Blade & Livewire)
+- **Database:** SQLite
 
-## Security Vulnerabilities
+---
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## 🖼️ Screenshots
 
-## License
+Below are sample screenshots of the dashboard:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+![Sign In Screen](https://github.com/user-attachments/assets/a5c8e509-346a-4d11-ac9f-6436617e264d)
+*Sign in screen – secure authentication powered by Filament.*
+
+![Chart Data Visualizations](https://github.com/user-attachments/assets/5c7afee0-e623-4e47-8373-32c7df0a8426)
+*Charts dashboard – track productivity, reject ratios, and output trends at a glance.*
+
+![Data Table View](https://github.com/user-attachments/assets/b68a8b21-a1a0-416d-babf-5cee40c42b3f)
+*Comprehensive data table – view, filter, and manage all packing performance records.*
+
+![Create Repeater Form](https://github.com/user-attachments/assets/221bf108-e46e-4fd7-beab-f353815bf603)
+*Bulk data entry using a repeater form – add multiple hourly records efficiently.*
+
+![Create New PIC with Relation](https://github.com/user-attachments/assets/dbdb2827-bdc7-4b82-b832-bf41823bfd0c)
+*Create new PIC on the fly – leverage FilamentPHP’s relation manager for seamless data entry.*
+
+![Edit Form](https://github.com/user-attachments/assets/c226d39f-48b3-477c-b9f4-3755a861b95f)
+*Edit performance data – intuitive, user-friendly forms for updating records.*
+
+---
+
+## 🚀 Challenge & Solution
+
+**Challenge:**  
+Build a robust, visually appealing dashboard for tracking strawberry packing performance, with at least 30 sample entries, within 4 days and using any tech stack.
+
+**Solution:**  
+Opted for Laravel 11 with FilamentPHP to rapidly scaffold CRUD resources, leverage built-in authentication, and integrate advanced charting. Designed a bulk entry form to streamline data input, enabling efficient recording of hourly productivity. Focused on clear, actionable visualizations to help admins optimize operations.
+
+---
+
+## 📌 Outcome
+
+Successfully completed all requested features and received an offer letter from Hyoshii. Politely declined the offer for personal reasons, but proud of the work and the technical solution delivered under a tight deadline.
+
+---
+
+## 📦 Getting Started
+
+1. Clone the repository  
+   `git clone https://github.com/AnakUtara/hyoshii-challenge.git`
+2. Install dependencies  
+   `composer install && npm install && npm run build`
+3. Configure your `.env` file
+4. Run migrations and seeders  
+   `php artisan migrate --seed`
+5. Start the development server  
+   `php artisan serve`
+
+---
+
+## 📚 Credits
+
+- **Hyoshii** for the challenging case study.
+- **FilamentPHP** for the powerful admin toolkit.
+- **Laravel** for its speed and flexibility.
